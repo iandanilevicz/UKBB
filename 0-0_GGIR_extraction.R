@@ -17,6 +17,7 @@ GGIR(#=======================================
              do.report = c(2, 4, 5), #for what parts does and report need to be generated? (option: 2, 4 and 5)
              overwrite = TRUE, #overwrite previous milestone data?
              do.parallel = T,
+             maxNcores = 35, 
              idloc = 1, #<= CHECK need to be 1
              print.filename = TRUE,
              storefolderstructure = FALSE,
