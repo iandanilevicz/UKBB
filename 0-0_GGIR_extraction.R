@@ -1,7 +1,16 @@
+# ========================================================= #
+# Script: 
+# Author: Vincent T. van Hees, Accelting
+#         Mathilde Chen, INSERM
+#         Ian M. Danilevicz, INSERM
+# Date: 2023
+# R script to process accelerometer data from UK biobank
+# ========================================================= #
+
 library(GGIRread)
 library(GGIR)
-print(packageVersion("GGIR"))
-print(packageVersion("GGIRread"))
+print(packageVersion("GGIR"))      # Used version 3.0.0
+print(packageVersion("GGIRread"))  # Used version 0.3.1
 
 datadir="/home1/USERS/DATA_UKBB/TEST300"
 outputdir="/home1/USERS/DATA_UKBB/RESULTS"
