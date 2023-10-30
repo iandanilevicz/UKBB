@@ -7,106 +7,107 @@
 # R script to process accelerometer data from UK biobank
 # ========================================================= #
 
+remotes::install_github("wadpac/GGIR")
 library(GGIRread)
 library(GGIR)
 print(packageVersion("GGIR"))      # Used version 3.0.0
 print(packageVersion("GGIRread"))  # Used version 0.3.1
 
-datadir="/home1/USERS/DATA_UKBB/TEST300"
+datadir="/home1/USERS/DATA_UKBB/TEST5"
 outputdir="/home1/USERS/DATA_UKBB/RESULTS"
 
-GGIR(#=======================================
-             # INPUT NEEDED:
-             #-------------------------------
+source("verisense_count_steps.R")
+myfun = list(FUN = verisense_count_steps,
+             parameters = c(4, 4, 20, -1.0, 4, 4, 0.01, 1.25), # updated based on Rowlands et al Stepping up with GGIR 2022
+             expected_sample_rate = 15,
+             expected_unit = "g",
+             colnames = c("step_count"),
+             outputres = 1,
+             minlength = 1,
+             outputtype = "numeric",
+             aggfunction = sum,
+             timestamp = F,
+             reporttype = "event")
+
+g.shell.GGIR(#-------------------------------
              # General parameters
              #-------------------------------
-             mode = c(1:5), #<= add 1 if also part 1 needs to be processed
-             datadir = datadir, #specify above
-             outputdir = outputdir, #specify above
-             do.report = c(2, 4, 5), #for what parts does and report need to be generated? (option: 2, 4 and 5)
-             overwrite = TRUE, #overwrite previous milestone data?
-             do.parallel = T,
-             maxNcores = 35, 
-             idloc = 1, #<= CHECK need to be 1
+             myfun = myfun,
+             mode = 1:5,
+             datadir = datadir,
+             outputdir = outputdir,
+             studyname = studyname,
+             do.report = c(2, 4, 5),
+             f0 = 1,
+             f1 = 0,
+             overwrite = TRUE,
+             do.parallel = TRUE,
+             maxNcores = 8,
+             idloc = idloc,
              print.filename = TRUE,
-             storefolderstructure = FALSE,
-             # data_cleaning_file = data_cleaning_file,
-             desiredtz = "Europe/London",
+             storefolderstructure = TRUE,
+             data_cleaning_file = data_cleaning_file,
+             desiredtz = desiredtz, 
              #-------------------------------
              # Part 1 parameters:
              #-------------------------------
-             # Key functions: reading file, auto-calibration, and extracting features
-             do.enmo = TRUE, #Needed for physical activity analysis
-             do.anglez = TRUE, #Needed for sleep detection
-             chunksize = 0.7, #size of data chunks to be read (value = 1 is maximum)
+             windowsizes = c(5, 900, 3600),
+             do.enmo = TRUE,
+             do.anglez = TRUE,
+             chunksize = 1,
              printsummary = TRUE,
              #-------------------------------
              # Part 2 parameters:
              #-------------------------------
-             # Key functions: Non-wear detection, imputation, and basic descriptives
-             strategy = 1, #Strategy (see tutorial for explanation)
-             hrs.del.start = 1, # Only relevant when strategy = 2. How many HOURS need to be ignored at the START of the measurement?
-             hrs.del.end = 1, # Only relevant when strategy = 2. How many HOURS need to be ignored at the END of the measurement?
-             maxdur = 15, # How many DAYS of measurement do you maximumally expect?
-             includedaycrit = 16, # number of minimum valid hours in a day to attempt physical activity analysis
-             M5L5res = 10, #resolution in minutes of M5 and L5 calculation
-             winhr = c(5,10), # size of M5 and L5 (5 hours by default)
-             qlevels = c(c(1380/1440),c(1410/1440)), #quantiles to calculate, set value at c() if you do not want quantiles
-             qwindow = c(0,24), #window over which to calculate quantiles
-             ilevels = c(seq(0,400, by = 50),8000), #acceleration values (metric ENMO) from which a frequency distribution needs to be derived, set value at c() if you do not want quantiles
-             iglevels = TRUE, # intensitygradient levels
-             mvpathreshold = c(100), #MVPA (moderate and vigorous physical activity threshold
-             #IVIS.activity.metric = 2,
+             strategy = strategy,
+             maxdur = maxdur,
+             winhr = c(5, 10),
+             ilevels = c(seq(0, 400, by = 50), 8000),
+             iglevels = TRUE,
+             mvpathreshold = c(100, 120),
+             IVIS_windowsize_minutes = 60,
+             IVIS.activity.metric = 2,
              #-------------------------------
              # Part 3 parameters:
              #-------------------------------
-             # Key functions: Sleep detection
-             timethreshold = 5, #10
-             anglethreshold = 5,
-             ignorenonwear = TRUE, # if TRUE non-wear is not detected as sleep (if FALSE then it will work with imputed data)
-             do.part3.pdf = FALSE,
+             do.part3.pdf = TRUE, 
              #-------------------------------
              # Part 4 parameters:
              #-------------------------------
-             # Key functions: Integrating sleep log (if available) with sleep detection, storing day and person specific summaries of sleep
-             excludefirstlast = TRUE, # Exclude first and last night for sleep analysis?
-             includenightcrit = 16, # number of minimum valid hours in a day to attempt sleep analysis
-             
-             # If sleep log is available:
-             #loglocation = c(), # loglocation, # full directory and name of the log (if available, otherwise leave value as c() )
-             # outliers.only = FALSE,# <= Check
-             # criterror = 4,
-             relyonguider = FALSE,
-             do.visual = FALSE,
-             #nnights = 14, #number of nights in the sleep log
+             excludefirstlast = excludefirstlast, # Exclude first and last night for sleep analysis?
+             def.noc.sleep = 1,
+             loglocation = loglocation,
+             outliers.only = TRUE,
+             criterror = 4,
+             colid = 1,
+             coln1 = 2,
              #-------------------------------
              # Part 5 parameters:
              #-------------------------------
-             # Key functions: Merging physical activity with sleep analyses
-             excludefirstlast.part5 = FALSE,
-             threshold.lig = c(40), # <= Check (NEEDS MORE INVESTIGATION)
-             threshold.mod = c(100), # <= Check (NEEDS MORE INVESTIGATION)
-             threshold.vig = c(400), # <= Check
-             boutcriter.in = 1, # <= Check
-             boutcriter.lig = 1, # <= Check
-             boutcriter.mvpa = 1, # <= Check
-             boutdur.in = c(10, 30), # duration of bouts to be calculated
-             boutdur.lig = c(10), # duration of bouts to be calculated
-             boutdur.mvpa = c(10), # duration of bouts to be calculated
-             timewindow = c("OO"), #
-             save_ms5rawlevels = FALSE,
-             part5_agg2_60seconds = TRUE, #<= Check
-             includedaycrit.part5 = 2/3,
+             # Threshold for intensity levels
+             threshold.lig = c(40, 45),
+             threshold.mod = c(100, 110),
+             threshold.vig = c(400),
+             boutcriter = 0.8,
+             boutcriter.in = 1,
+             boutcriter.lig = 1,
+             boutcriter.mvpa = 1,
+             # duration of bouts to be calculated
+             boutdur.in = c(10, 30), 
+             boutdur.lig = c(10),
+             boutdur.mvpa = c(10),
+             timewindow = timewindow,
+             save_ms5rawlevels = TRUE,
+             includedaycrit.part5 = 2 / 3,
              minimum_MM_length.part5 = 23,
-             frag.metrics = "all", #<= Check
-
+             frag.metrics = "all",
+             LUX_cal_constant = LUX_cal_constant,
+             LUX_cal_exponent = LUX_cal_exponent,
+             LUX_day_segments = c(4, 8, 12, 16, 20, 24),
+             part5_agg2_60seconds = TRUE,
+             cosinor = TRUE,
              #-----------------------------------
-             # Report generation
-             #-------------------------------
-             # Key functions: Generating reports based on meta-data
-             visualreport = FALSE,
-             dofirstpage = FALSE, #first page of pdf-report with simple summary histograms
-             viewingwindow = 1
-) #viewingwindow of visual report: 1 centres at day and 2 centers at night
+             # pdf report generation
+             visualreport = FALSE)
 
 
