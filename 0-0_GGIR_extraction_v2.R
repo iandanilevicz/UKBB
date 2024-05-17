@@ -259,7 +259,7 @@ GGIR(#-------------------------------
      do.sibreport = do.sibreport,
      save_ms5rawlevels = TRUE,
      save_ms5raw_format = "RData",
-     save_ms5raw_without_invalid = TRUE, # this was already the default
+     save_ms5raw_without_invalid = FALSE, # this needs to be FALSE, because we want the full time series to be exported by part 5, see Vincent's email 17/05/2024
      includedaycrit.part5 = 2/3,
      includenightcrit.part5 = 2/3,
      minimum_MM_length.part5 = 23,
