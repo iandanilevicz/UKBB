@@ -91,13 +91,13 @@ if (user == "Vincent") {
     } 
   }
   verisensedir = "/\\172.27.137.244\\UK_BB_run$\\Codes\\verisense_count_steps.R"
-  mode = 5:6#2:6
+  mode = 2:6
   do.parallel = TRUE
   overwrite =  TRUE
   f0 = 1
   f1 = 0
   do.part2.pdf = FALSE
-  do.report = 5:6#c(2,4:6)
+  do.report = c(2,4:6)
   #verisensedir = "verisense_count_steps.R"
   part6DFA = TRUE
   maxNcores = 20 
