@@ -27,7 +27,7 @@ print(packageVersion("GGIRread"))  # Used version 0.3.1 -> 1.0.0
 # User's edition 
 user = "Ian"
 study  = "UKBiobank"
-batch = 7
+batch = 0
 # ========================================================= #
 
 # ========================================================= #
@@ -65,8 +65,8 @@ if (user == "Vincent") {
 } else if (user == "Ian") {
   if (study == "UKBiobank") {
     if (batch == 0) {
-      local_datadir = "/\\172.27.137.244\\UK_BB_run$\\TEST\\Data"
-      local_outputdir = "/\\172.27.137.244\\UK_BB_run$\\TEST"
+      local_datadir = "/\\172.27.137.244\\i_danilevicz$\\UK_BB\\sample6\\sample6"
+      local_outputdir = "/\\172.27.137.244\\i_danilevicz$\\UK_BB\\sample6"
     } else if (batch == 1) {
       local_datadir = "/\\172.27.137.244\\UK_BB_run$\\Batch1"
       local_outputdir = "/\\172.27.137.244\\UK_BB_run$"
@@ -259,7 +259,7 @@ GGIR(#-------------------------------
      do.sibreport = do.sibreport,
      save_ms5rawlevels = TRUE,
      save_ms5raw_format = "RData",
-     save_ms5raw_without_invalid = FALSE, # this needs to be FALSE, because we want the full time series to be exported by part 5, see Vincent's email 17/05/2024
+     save_ms5raw_without_invalid = TRUE, # we corrected this, see github AGAIN save store memory
      includedaycrit.part5 = 2/3,
      includenightcrit.part5 = 2/3,
      minimum_MM_length.part5 = 23,
