@@ -51,7 +51,7 @@ To verify the robustness of the findings, we stratified our analyses.
 - 6_1_sPLSDR_stratified_UKB.R
 - 6_1_sPLSDR_stratified_UKB.R
 
-## Step 6 - Model fitting
+## Step 6 - Model fitting on a different outcome
 
 To verify the specificity of the findings, we replicate the analyses on a different outcome.
 
@@ -62,20 +62,20 @@ To verify the specificity of the findings, we replicate the analyses on a differ
 
 Here we perform some additional analyses that were not initially planned but were valuable suggestions from the reviewers.
 
-### Step 7.1
+### Step 7.1 - EDA
 
 To verify whether the selected sample from the UK Biobank is similar to the general UK Biobank population, we conducted an exploratory data analysis (EDA) comparing the two samples.
 
 - 8-1_posthoc_EDA_UKB.R 
 
-### Step 7.2
+### Step 7.2 - Simpler models
 
 To assess the impact of digital sleep–wake cycle (SWC) components, we fit simpler models with fewer covariates.
 
 - 9-1_posthoc_sPLS_models_UKB.R
 - 9-2_posthoc_sPLS_models_WII.R
 
-### Step 7.3 
+### Step 7.3 - Two-year lag 
 
 To verify the robustness of the findings, we conducted analyses using a different definition of the event (applying a two-year lag).
 
