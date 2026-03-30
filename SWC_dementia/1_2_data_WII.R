@@ -534,10 +534,7 @@ write.csv(x = tab_cov_A4,    file = "data_WII_A4.csv", row.names = F)
 
 # ---------------------------------------------------------------------------- #
 # End 
-# Close with security 
-setwd("C:/Users/i_danilevicz/Documents")
-rm(list=ls())
-# ---------------------------------------------------------------------------- #
+
 
 
 
