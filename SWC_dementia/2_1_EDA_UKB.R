@@ -209,7 +209,4 @@ quantile(time_case, 0.75, na.rm=TRUE)
 quantile(time_case, 0.5, na.rm=TRUE)
 # ---------------------------------------------------------------------------- #
 # End 
-# Close with security 
-setwd("C:/Users/i_danilevicz/Documents")
-rm(list=ls())
-# ---------------------------------------------------------------------------- #
+
